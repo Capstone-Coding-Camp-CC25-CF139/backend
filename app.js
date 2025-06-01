@@ -1,11 +1,11 @@
 import express from "express";
 import dotenv from "dotenv";
+import path from "path";
 import userRoutes from "./routes/userRoutes.js";
 import { authenticateToken } from "./middleware/authMiddleware.js";
 import swaggerJsdoc from "swagger-jsdoc";
 import swaggerUi from "swagger-ui-express";
 
-// swagger
 const swaggerSpec = swaggerJsdoc({
   definition: {
     openapi: "3.0.0",
@@ -36,16 +36,15 @@ const app = express();
 const port = 5000;
 
 app.use(express.json());
-
-
-
-app.use("/", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+app.use(express.static(path.join(process.cwd(), "public")));
+app.get("/swagger.json", (req, res) => {
+  res.json(swaggerSpec);
+});
+app.get("/", (req, res) => {
+  res.sendFile(path.join(process.cwd(), "public/swagger.html"));
+});
 
 app.use("/api/users", userRoutes);
-
-app.listen(port, () => {
-  console.log(`Server berjalan di http://localhost:${port}`);
-});
 
 app.get("/api/protected", authenticateToken, (req, res) => {
   res.json({
@@ -54,7 +53,4 @@ app.get("/api/protected", authenticateToken, (req, res) => {
   });
 });
 
-
-// app.get("/", (req, res) => {
-//   res.send("Halo dari Express.js!");
-// });
+app.listen(port, () => {});
