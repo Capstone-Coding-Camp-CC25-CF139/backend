@@ -3,6 +3,8 @@ import dotenv from "dotenv";
 import path from "path";
 import userRoutes from "./routes/userRoutes.js";
 import { authenticateToken } from "./middleware/authMiddleware.js";
+import photoRoutes from "./routes/photoRoutes.js";
+import reviewRoutes from "./routes/reviewRoutes.js";
 import swaggerJsdoc from "swagger-jsdoc";
 import swaggerUi from "swagger-ui-express";
 
@@ -43,9 +45,9 @@ app.get("/swagger.json", (req, res) => {
 app.get("/", (req, res) => {
   res.sendFile(path.join(process.cwd(), "public/swagger.html"));
 });
-
+app.use("/api/review", reviewRoutes);
 app.use("/api/users", userRoutes);
-
+app.use("/api/photos", photoRoutes);
 app.get("/api/protected", authenticateToken, (req, res) => {
   res.json({
     message: "Data rahasia untuk user yang sudah login",
