@@ -1,7 +1,7 @@
 import express from "express";
 import upload from "../middleware/upload.js";
 import { authenticateToken } from "../middleware/authMiddleware.js";
-import { uploadPhoto, uploadPhotoV2, getAllImages, getImagesByUid } from "../controllers/photoController.js";
+import { uploadPhoto, uploadPhotoV2, uploadToPredict, getAllImages, getImagesByUid } from "../controllers/photoController.js";
 
 const router = express.Router();
 
@@ -62,6 +62,39 @@ router.post(
   authenticateToken,
   upload.single("image"),
   uploadPhotoV2
+);
+
+/**
+ * @swagger
+ * /api/photos/uploadtopredict:
+ *   post:
+ *     summary: Upload foto ke Cloudinary dan simpan metadata ke Supabase untuk prediksi model
+ *     tags: [Photos]
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         multipart/form-data:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               image:
+ *                 type: string
+ *                 format: binary
+ *     responses:
+ *       201:
+ *         description: Upload berhasil dan metadata disimpan
+ *       400:
+ *         description: Tidak ada file yang diupload
+ *       500:
+ *         description: Upload gagal
+ */
+router.post(
+  "/uploadtopredict",
+  authenticateToken,
+  upload.single("image"),
+  uploadToPredict
 );
 
 
