@@ -6,6 +6,7 @@ import { authenticateToken } from "./middleware/authMiddleware.js";
 import photoRoutes from "./routes/photoRoutes.js";
 import reviewRoutes from "./routes/reviewRoutes.js";
 import swaggerJsdoc from "swagger-jsdoc";
+import cors  from "cors";
 import swaggerUi from "swagger-ui-express";
 
 const swaggerSpec = swaggerJsdoc({
@@ -37,6 +38,12 @@ dotenv.config();
 const app = express();
 const port = 5000;
 
+app.use(
+  cors({
+    origin: "http://localhost:3000",
+    credentials: true,
+  })
+);
 app.use(express.json());
 app.use(express.static(path.join(process.cwd(), "public")));
 app.get("/swagger.json", (req, res) => {
