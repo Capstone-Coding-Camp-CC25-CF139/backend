@@ -1,12 +1,16 @@
 import express from "express";
 import { authenticateToken } from "../middleware/authMiddleware.js";
-import { postReview, getReviews, getReviewById } from "../controllers/reviewController.js";
+import {
+  postReview,
+  getReviews,
+  getReviewById,
+} from "../controllers/reviewController.js";
 
 const router = express.Router();
 
 /**
  * @swagger
- * /api/review/post:
+ * /api/reviews:
  *   post:
  *     summary: Submit review user
  *     tags: [Review]
@@ -44,12 +48,11 @@ const router = express.Router();
  *       500:
  *         description: Server error
  */
-
-router.post("/post", authenticateToken, postReview);
+router.post("/", authenticateToken, postReview);
 
 /**
  * @swagger
- * /api/review/getAll:
+ * /api/reviews:
  *   get:
  *     summary: Ambil semua review
  *     tags: [Review]
@@ -59,12 +62,11 @@ router.post("/post", authenticateToken, postReview);
  *       500:
  *         description: Server error
  */
-router.get("/getAll", getReviews);
-
+router.get("/", getReviews);
 
 /**
  * @swagger
- * /api/review/get/{id}:
+ * /api/reviews/{id}:
  *   get:
  *     summary: Ambil review berdasarkan ID
  *     tags: [Review]
@@ -83,6 +85,6 @@ router.get("/getAll", getReviews);
  *       500:
  *         description: Server error
  */
-router.get("/get/:id", getReviewById);
+router.get("/:id", getReviewById);
 
 export default router;
